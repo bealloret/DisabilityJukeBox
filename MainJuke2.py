@@ -2,7 +2,8 @@ import streamlit as st
 from pytube import YouTube
 
 # Function to load YouTube video
-def load_video(video_url):
+def load_video(video_id):
+    video_url = f"https://www.youtube.com/watch?v={video_id}"
     yt = YouTube(video_url)
     return yt.streams.filter(adaptive=True, file_extension='mp4').first().url
 
@@ -45,10 +46,11 @@ artist_links = [
 st.title("Disability Juke Box")
 for i, video_id in enumerate(video_ids):
     st.header(f"Song {i + 1}")
-    video_url = f"https://www.youtube.com/embed/{video_id}?autoplay=1"
-    st.markdown(f'<iframe width="560" height="315" src="{video_url}" frameborder="0" allowfullscreen></iframe>', unsafe_allow_html=True)
+    video_url = load_video(video_id)  # Load video using the video ID
+    st.video(video_url)
     rating, disability_guess = display_questions(i)
     st.caption("Reveal")
-    if st.button(f"Reveal Artist Info({i + 1})"):
+    if st.button(f"Reveal Artist Info ({i + 1})"):
         st.write(artist_info[i])
         st.write(f"Read more about the artist [here]({artist_links[i]})")
+
