@@ -1,11 +1,29 @@
 import streamlit as st
 from pytube import YouTube
 from pytube.exceptions import VideoUnavailable
+from urllib.error import HTTPError
 
-def load_video(video_url):
-    yt = YouTube(video_url)
-    return yt.streams.filter(adaptive=True, file_extension='mp4').first().url
+def load_video(video_id):
+    try:
+        # If video_id is just the alphanumeric ID, construct the full YouTube URL
+        if 'youtube.com' not in video_id:
+            video_url = f'https://www.youtube.com/watch?v={video_id}'
+        else:
+            video_url = video_id
 
+        yt = YouTube(video_url)
+        stream = yt.streams.filter(adaptive=True, file_extension='mp4').first()
+        if stream:
+            return stream.url
+        else:
+            return None  # No suitable stream found
+    except VideoUnavailable:
+        st.error("Video is unavailable")
+        return None  # Video is unavailable
+    except HTTPError as e:
+        st.error(f"Error accessing video URL: {e}")
+        return None  # Error accessing video URL
+        
 # Function to display questions and collect responses
 def display_questions(video_index):
     st.caption("Feedback")
