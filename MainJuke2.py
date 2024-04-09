@@ -3,9 +3,15 @@ from pytube import YouTube
 
 # Function to load YouTube video
 def load_video(video_id):
-    video_url = f"https://www.youtube.com/watch?v={video_id}"
-    yt = YouTube(video_url)
-    return yt.streams.filter(adaptive=True, file_extension='mp4').first().url
+    try:
+        yt = YouTube(f'https://www.youtube.com/watch?v={video_id}')
+        stream = yt.streams.filter(adaptive=True, file_extension='mp4').first()
+        if stream:
+            return stream.url
+        else:
+            return None  # No suitable stream found
+    except VideoUnavailable:
+        return None  # Video is unavailable
 
 # Function to display questions and collect responses
 def display_questions(video_index):
