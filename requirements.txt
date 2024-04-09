@@ -3,4 +3,3 @@ pytube==11.0.1
 numpy
 pip==21.3.1
 setuptools==59.6.0
-csv
