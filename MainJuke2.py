@@ -1,5 +1,6 @@
 import streamlit as st
 from pytube import YouTube
+from pytube.exceptions import VideoUnavailable
 
 # Function to load YouTube video
 def load_video(video_id):
