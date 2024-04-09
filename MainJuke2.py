@@ -1,5 +1,7 @@
 import streamlit as st
 from pytube import YouTube
+import csv
+
 
 # Function to load YouTube video
 def load_video(video_url):
@@ -14,6 +16,15 @@ def display_questions(video_index):
                                  ('mental illness', 'sensory disability: deafness', 'sensory disability: blindness', 'physical disability: amputation'), key=f"disability_{video_index}")
 
     return rating, disability_guess
+
+# Function to save responses to CSV file
+def save_to_csv(filename, data):
+    with open(filename, "a", newline="") as file:
+        writer = csv.DictWriter(file, fieldnames=["Video", "Rating", "Disability Guess"])
+        if file.tell() == 0:
+            writer.writeheader()
+        writer.writerow(data)
+
 
 # List of YouTube video URLs
 video_urls = [
@@ -51,5 +62,12 @@ for i, video_url in enumerate(video_urls):
     if st.button(f"Reveal Artist Info ({i + 1})"):
         st.write(artist_info[i])
         st.write(f"Read more about the artist [here]({artist_links[i]})")
-
+        
+# Save responses to CSV file
+    data = {
+        "Video": f"Video {i + 1}",
+        "Rating": rating,
+        "Disability Guess": disability_guess
+    }
+    save_to_csv("responses.csv", data)
 
