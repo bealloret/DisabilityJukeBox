@@ -2,7 +2,6 @@ import streamlit as st
 from pytube import YouTube
 import csv
 
-
 # Function to load YouTube video
 def load_video(video_url):
     yt = YouTube(video_url)
@@ -24,7 +23,6 @@ def save_to_csv(filename, data):
         if file.tell() == 0:
             writer.writeheader()
         writer.writerow(data)
-
 
 # List of YouTube video URLs
 video_urls = [
@@ -57,17 +55,17 @@ st.title("Disability Juke Box")
 for i, video_url in enumerate(video_urls):
     st.header(f"Song {i + 1}")
     st.video(video_url)  # Display video
-    rating, disability_guess = display_questions(i)
-    st.caption("Reveal")
-    if st.button(f"Reveal Artist Info ({i + 1})"):
-        st.write(artist_info[i])
-        st.write(f"Read more about the artist [here]({artist_links[i]})")
-        
-# Save responses to CSV file
-    data = {
-        "Video": f"Video {i + 1}",
-        "Rating": rating,
-        "Disability Guess": disability_guess
-    }
-    save_to_csv("responses.csv", data)
+    display_questions(i)  # Display questions
+
+# Submit button to save responses
+if st.button("Submit"):
+    for i in range(len(video_urls)):
+        rating, disability_guess = display_questions(i)
+        data = {
+            "Video": f"Video {i + 1}",
+            "Rating": rating,
+            "Disability Guess": disability_guess
+        }
+        save_to_csv("responses.csv", data)
+
 
