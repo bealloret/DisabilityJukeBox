@@ -1,29 +1,11 @@
 import streamlit as st
 from pytube import YouTube
-from pytube.exceptions import VideoUnavailable
-from urllib.error import HTTPError
 
-def load_video(video_id):
-    try:
-        # If video_id is just the alphanumeric ID, construct the full YouTube URL
-        if 'youtube.com' not in video_id:
-            video_url = f'https://www.youtube.com/watch?v={video_id}'
-        else:
-            video_url = video_id
+# Function to load YouTube video
+def load_video(video_url):
+    yt = YouTube(video_url)
+    return yt.streams.filter(adaptive=True, file_extension='mp4').first().url
 
-        yt = YouTube(video_url)
-        stream = yt.streams.filter(adaptive=True, file_extension='mp4').first()
-        if stream:
-            return stream.url
-        else:
-            return None  # No suitable stream found
-    except VideoUnavailable:
-        st.error("Video is unavailable")
-        return None  # Video is unavailable
-    except HTTPError as e:
-        st.error(f"Error accessing video URL: {e}")
-        return None  # Error accessing video URL
-        
 # Function to display questions and collect responses
 def display_questions(video_index):
     st.caption("Feedback")
@@ -33,13 +15,13 @@ def display_questions(video_index):
 
     return rating, disability_guess
 
-# List of YouTube video IDs
-video_ids = [
-    "apBWI6xrbLY",
-    "s71I_EWJk7I",
-    "0qanF-91aJo",
-    "gcE1avXFJb4",
-    "Idsb6gk6j_U"
+# List of YouTube video URLs
+video_urls = [
+    "https://www.youtube.com/watch?v=apBWI6xrbLY",
+    "https://www.youtube.com/watch?v=s71I_EWJk7I",
+    "https://www.youtube.com/watch?v=0qanF-91aJo",
+    "https://www.youtube.com/watch?v=gcE1avXFJb4",
+    "https://www.youtube.com/watch?v=Idsb6gk6j_U"
 ]
 
 # List of artists with disabilities and Wikipedia links
@@ -61,13 +43,13 @@ artist_links = [
 
 # Main Streamlit app
 st.title("Disability Juke Box")
-for i, video_id in enumerate(video_ids):
+for i, video_url in enumerate(video_urls):
     st.header(f"Song {i + 1}")
-    video_url = load_video(video_id)  # Load video using the video ID
-    st.video(video_url)
+    st.video(video_url)  # Display video
     rating, disability_guess = display_questions(i)
     st.caption("Reveal")
     if st.button(f"Reveal Artist Info ({i + 1})"):
         st.write(artist_info[i])
         st.write(f"Read more about the artist [here]({artist_links[i]})")
+
 
