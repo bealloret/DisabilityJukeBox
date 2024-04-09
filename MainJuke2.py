@@ -14,15 +14,18 @@ def display_questions(video_index):
     disability_guess = st.radio(f"One of the creators/performers of this song had a disability. Which disability do you think it was? (Song {video_index + 1})",
                                  ('mental illness', 'sensory disability: deafness', 'sensory disability: blindness', 'physical disability: amputation'), key=f"disability_{video_index}")
 
+    # Save responses to CSV file
+    save_response_to_csv(video_index + 1, rating, disability_guess)
+
     return rating, disability_guess
 
 # Function to save responses to CSV file
-def save_to_csv(filename, data):
-    with open(filename, "a", newline="") as file:
-        writer = csv.DictWriter(file, fieldnames=["Video", "Rating", "Disability Guess"])
+def save_response_to_csv(video_index, rating, disability_guess):
+    with open("responses.csv", "a", newline="") as file:
+        writer = csv.writer(file)
         if file.tell() == 0:
-            writer.writeheader()
-        writer.writerow(data)
+            writer.writerow(["Video", "Rating", "Disability Guess"])
+        writer.writerow([f"Video {video_index}", rating, disability_guess])
 
 # List of YouTube video URLs
 video_urls = [
@@ -56,16 +59,4 @@ for i, video_url in enumerate(video_urls):
     st.header(f"Song {i + 1}")
     st.video(video_url)  # Display video
     display_questions(i)  # Display questions
-
-# Submit button to save responses
-if st.button("Submit"):
-    for i in range(len(video_urls)):
-        rating, disability_guess = display_questions(i)
-        data = {
-            "Video": f"Video {i + 1}",
-            "Rating": rating,
-            "Disability Guess": disability_guess
-        }
-        save_to_csv("responses.csv", data)
-
 
