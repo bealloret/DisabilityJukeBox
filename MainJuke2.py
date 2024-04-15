@@ -19,10 +19,9 @@ def display_questions(video_index):
 
 # Function to save responses to CSV file
 def save_to_csv(filename, data):
-    with open(filename, "a", newline="") as file:
+    with open(filename, "w", newline="") as file:
         writer = csv.DictWriter(file, fieldnames=["Video", "Rating", "Disability Guess"])
-        if file.tell() == 0:
-            writer.writeheader()
+        writer.writeheader()
         writer.writerow(data)
 
 
