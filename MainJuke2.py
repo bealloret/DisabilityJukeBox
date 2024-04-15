@@ -2,6 +2,8 @@ import streamlit as st
 from pytube import YouTube
 from streamlit_gsheets import GSheetsConnection
 
+# Establish a connection to Google Sheets
+conn = st.secrets["gsheets"]
 
 # Function to load YouTube video
 def load_video(video_url):
