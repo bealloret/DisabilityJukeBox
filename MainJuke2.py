@@ -1,6 +1,6 @@
 import streamlit as st
 from pytube import YouTube
-import csv
+from streamlit_gsheets import GSheetsConnection
 
 
 # Function to load YouTube video
@@ -62,10 +62,15 @@ for i, video_url in enumerate(video_urls):
         st.write(artist_info[i])
         st.write(f"Read more about the artist [here]({artist_links[i]})")
         
-    # Save responses to CSV file
+    # Save responses to Google Sheets
     data = {
         "Video": f"Video {i + 1}",
         "Rating": rating,
         "Disability Guess": disability_guess
     }
-    save_to_csv("responses.csv", data)
+    conn.write(data)
+
+# Display the data collected from Google Sheets
+df = conn.read()
+for row in df.itertuples():
+    st.write(f"{row.name} has a :{row.pet}:")
