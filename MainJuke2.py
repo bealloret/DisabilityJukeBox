@@ -1,13 +1,22 @@
 import streamlit as st
 from pytube import YouTube
 import csv
+import builtins  # Import builtins module for the built-in function type
+
+# Custom hash function for the main function
+def my_hash_func(main_func):
+    # Implement custom hashing logic here
+    # For simplicity, let's return a hash of the function's name
+    return hash(main_func.__name__)
 
 # Function to load YouTube video
+@st.cache(hash_funcs={builtins.function: my_hash_func})  # Register custom hash function
 def load_video(video_url):
     yt = YouTube(video_url)
     return yt.streams.filter(adaptive=True, file_extension='mp4').first().url
 
 # Function to display questions and collect responses
+@st.cache(hash_funcs={builtins.function: my_hash_func})  # Register custom hash function
 def display_questions(video_index):
     st.caption("Feedback")
     rating = st.slider(f"How much do you like this song (Video {video_index + 1})?", 1, 5, key=f"rating_{video_index}")
@@ -17,6 +26,7 @@ def display_questions(video_index):
     return rating, disability_guess
 
 # Function to save responses to CSV file
+@st.cache(hash_funcs={builtins.function: my_hash_func})  # Register custom hash function
 def save_to_csv(filename, data):
     with open(filename, "a", newline="") as file:
         writer = csv.DictWriter(file, fieldnames=["Video", "Rating", "Disability Guess"])
@@ -25,6 +35,7 @@ def save_to_csv(filename, data):
         writer.writerow(data)
 
 # Function to retrieve saved data from CSV file
+@st.cache(hash_funcs={builtins.function: my_hash_func})  # Register custom hash function
 def get_saved_data(filename):
     saved_data = []
     with open(filename, "r", newline="") as file:
