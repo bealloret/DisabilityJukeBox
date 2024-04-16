@@ -5,3 +5,4 @@ pip==21.3.1
 setuptools==59.6.0
 st-gsheets-connection
 csv
+base64
