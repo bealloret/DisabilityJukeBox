@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import csv
+import base64
 
 # Function to save responses to CSV file
 def save_to_csv(filename, data):
