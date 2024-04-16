@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import csv
 import base64
+import requests
 
 # Function to save responses to CSV file
 def save_to_csv(filename, data):
@@ -46,15 +47,13 @@ for i, video_url in enumerate(video_urls):
     }
     save_to_csv("responses.csv", data)
 
-# Display a download button for the CSV file
-st.markdown("### Download Responses as CSV")
-st.markdown("Download the responses as a CSV file:")
-button_label = "Download CSV"
-button_id = "download_csv"
-if st.button(button_label, key=button_id):
+# Define API endpoint
+@st.cache
+def api_endpoint():
     saved_data = get_saved_data("responses.csv")
-    df = pd.DataFrame(saved_data)
-    csv = df.to_csv(index=False)
-    b64 = base64.b64encode(csv.encode()).decode()
-    href = f'<a href="data:file/csv;base64,{b64}" download="responses.csv">Download CSV File</a>'
-    st.markdown(href, unsafe_allow_html=True)
+    return saved_data
+
+# Display a button to trigger data retrieval via API
+if st.button("Get Data via API"):
+    response = api_endpoint()
+    st.write(response)
