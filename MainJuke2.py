@@ -1,9 +1,6 @@
 import streamlit as st
 from pytube import YouTube
-from streamlit_gsheets import GSheetsConnection
-
-# Establish a connection to Google Sheets
-conn = st.secrets["gsheets"]
+import csv
 
 # Function to load YouTube video
 def load_video(video_url):
@@ -21,11 +18,20 @@ def display_questions(video_index):
 
 # Function to save responses to CSV file
 def save_to_csv(filename, data):
-    with open(filename, "w", newline="") as file:
+    with open(filename, "a", newline="") as file:
         writer = csv.DictWriter(file, fieldnames=["Video", "Rating", "Disability Guess"])
-        writer.writeheader()
+        if file.tell() == 0:
+            writer.writeheader()
         writer.writerow(data)
 
+# Function to retrieve saved data from CSV file
+def get_saved_data(filename):
+    saved_data = []
+    with open(filename, "r", newline="") as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            saved_data.append(row)
+    return saved_data
 
 # List of YouTube video URLs
 video_urls = [
@@ -34,23 +40,6 @@ video_urls = [
     "https://www.youtube.com/watch?v=0qanF-91aJo",
     "https://www.youtube.com/watch?v=gcE1avXFJb4",
     "https://www.youtube.com/watch?v=Idsb6gk6j_U"
-]
-
-# List of artists with disabilities and Wikipedia links
-artist_info = [
-    "Brian Wilson was a renowned musician who despite suffering from severe mental health issues, created groundbreaking music.",
-    "Ludwig van Beethoven was a visionary composer who lived with hearing loss and inspired millions.",
-    "Tony Iommi was a virtuoso guitarist who continued performing despite a physical disability.",
-    "Django Reinhardt was a talented guitarist who faced amputation of his fingers but found solace in music.",
-    "Joaquín Rodrigo was a prolific composer who triumphed over blindness to create unforgettable melodies."
-]
-
-artist_links = [
-    "https://en.wikipedia.org/wiki/Brian_Wilson",
-    "https://en.wikipedia.org/wiki/Ludwig_van_Beethoven",
-    "https://en.wikipedia.org/wiki/Tony_Iommi",
-    "https://en.wikipedia.org/wiki/Django_Reinhardt",
-    "https://en.wikipedia.org/wiki/Joaqu%C3%ADn_Rodrigo"
 ]
 
 # Main Streamlit app
@@ -64,15 +53,16 @@ for i, video_url in enumerate(video_urls):
         st.write(artist_info[i])
         st.write(f"Read more about the artist [here]({artist_links[i]})")
         
-    # Save responses to Google Sheets
+    # Save responses to CSV file
     data = {
         "Video": f"Video {i + 1}",
         "Rating": rating,
         "Disability Guess": disability_guess
     }
-    conn.write(data)
+    save_to_csv("responses.csv", data)
 
-# Display the data collected from Google Sheets
-df = conn.read()
-for row in df.itertuples():
-    st.write(f"{row.name} has a :{row.pet}:")
+# Display the saved data
+st.subheader("Saved Data")
+saved_data = get_saved_data("responses.csv")
+for row in saved_data:
+    st.write(row)
