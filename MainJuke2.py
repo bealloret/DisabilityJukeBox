@@ -8,11 +8,13 @@ import datetime
 # Function to save responses to CSV file
 def save_to_csv(filename, data):
     data["Date"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Add current date and time
+    existing_data = get_saved_data(filename)
     with open(filename, "a", newline="") as file:
         writer = csv.DictWriter(file, fieldnames=["Date", "Video", "Rating", "Disability Guess"])
-        if file.tell() == 0:
-            writer.writeheader()
-        writer.writerow(data)
+        if not existing_data or data not in existing_data:
+            if file.tell() == 0:
+                writer.writeheader()
+            writer.writerow(data)
 
 
 # Function to retrieve saved data from CSV file
