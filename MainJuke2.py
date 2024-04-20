@@ -11,7 +11,7 @@ def save_to_csv(filename, data):
     existing_data = get_saved_data(filename)
     with open(filename, "a", newline="") as file:
         writer = csv.DictWriter(file, fieldnames=["Video", "Rating", "Disability Guess"])
-        if not existing_data or data not in existing_data:
+        if not any(entry["Video"] == data["Video"] and entry["Rating"] == data["Rating"] and entry["Disability Guess"] == data["Disability Guess"] for entry in existing_data):
             if file.tell() == 0:
                 writer.writeheader()
             data["Date"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Add current date and time
@@ -20,6 +20,7 @@ def save_to_csv(filename, data):
                 "Rating": data["Rating"],
                 "Disability Guess": data["Disability Guess"]
             })
+
 
 # Function to retrieve saved data from CSV file
 def get_saved_data(filename):
