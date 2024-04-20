@@ -91,10 +91,6 @@ for i, video_url in enumerate(video_urls):
     save_to_csv("responses.csv", data, entry_number)
 
 # Define API endpoint
-@st.cache
-def api_endpoint():
-    saved_data =
-
     @st.cache
     def api_endpoint():
         saved_data = get_saved_data("responses.csv")
