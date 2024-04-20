@@ -10,11 +10,12 @@ import matplotlib.pyplot as plt
 def save_to_csv(filename, data):
     existing_data = get_saved_data(filename)
     with open(filename, "a", newline="") as file:
-        writer = csv.DictWriter(file, fieldnames=["Date", "Video", "Rating", "Disability Guess"])
+        writer = csv.DictWriter(file, fieldnames=["Case", "Date", "Video", "Rating", "Disability Guess"])
         if not existing_data or data not in existing_data:
             if file.tell() == 0:
                 writer.writeheader()
             data["Date"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Add current date and time
+            data["Case"] = len(existing_data) + 1  # Assign a unique case number
             writer.writerow(data)
 
 
