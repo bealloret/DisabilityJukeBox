@@ -75,7 +75,7 @@ for i, video_url in enumerate(video_urls):
     
      # Save responses to CSV file
     data = {
-        "Date": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        #"Date": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "Video": f"Video {i + 1}",
         "Rating": rating,
         "Disability Guess": disability_guess
