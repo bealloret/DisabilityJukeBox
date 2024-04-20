@@ -107,13 +107,16 @@ elif visualization_type == "Graph":
     response = api_endpoint()
     df = pd.DataFrame(response)
     fig, ax = plt.subplots()
-    for video, rating in zip(df["Video"], df["Rating"]):
+    videos = [f"Video {i}" for i in range(1, 6)]
+    for video, rating in zip(videos, df["Rating"]):
         ax.plot(video, rating, marker='o', label=f"{video} - Rating: {rating}")
     ax.set_xlabel("Video")
     ax.set_ylabel("Rating")
     ax.set_title("Rating for Each Video")
+    ax.set_ylim(1, 5)  # Set y-axis limits to ensure ratings range from 1 to 5
     ax.legend()
     st.pyplot(fig)
+
 
 
 
