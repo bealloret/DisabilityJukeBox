@@ -105,11 +105,14 @@ if visualization_type == "Table":
 elif visualization_type == "Graph":
     response = api_endpoint()
     df = pd.DataFrame(response)
-    rating_counts = df["Rating"].value_counts().sort_index()
-    plt.bar(rating_counts.index, rating_counts.values)
-    plt.xlabel("Rating")
-    plt.ylabel("Count")
-    plt.title("Rating Distribution")
-    st.pyplot(plt)
+    fig, ax = plt.subplots()
+    for video, data in df.groupby("Video"):
+        rating_counts = data["Rating"].value_counts().sort_index()
+        ax.plot(rating_counts.index, rating_counts.values, label=video)
+    ax.set_xlabel("Rating")
+    ax.set_ylabel("Count")
+    ax.set_title("Rating Distribution by Video")
+    ax.legend()
+    st.pyplot(fig)
 
 
