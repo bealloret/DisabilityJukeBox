@@ -67,7 +67,7 @@ for i, video_url in enumerate(video_urls):
         st.markdown(f"[More info on Wikipedia]({artist_links[i]})")
     
     # Save responses to CSV file
-    data = {
+data = {
     "Date": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
     "Video": f"Video {i + 1}",
     "Rating": rating,
