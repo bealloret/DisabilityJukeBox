@@ -78,45 +78,42 @@ for i, video_url in enumerate(video_urls):
     if st.button(f"Show Artist Info for Song {i + 1}"):
         st.markdown(artist_info[i])
         st.markdown(f"[More info on Wikipedia]({artist_links[i]})")
-        # Generate an entry number using the current timestamp
- 
-# Generate an entry number using the current timestamp
-entry_number = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+        
+    # Generate an entry number using the current timestamp
+    entry_number = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
 
-# Save responses to CSV file
-data = {
-    "Video": f"Video {i + 1}",
-    "Rating": rating,
-    "Disability Guess": disability_guess
-}
-save_to_csv("responses.csv", data, entry_number)
+    # Save responses to CSV file
+    data = {
+        "Video": f"Video {i + 1}",
+        "Rating": rating,
+        "Disability Guess": disability_guess
+    }
+    save_to_csv("responses.csv", data, entry_number)
+
+    # Define API endpoint
+    @st.cache
+    def api_endpoint():
+        saved_data = get_saved_data("responses.csv")
+        return saved_data
+
+    # Display a selectbox to choose the data visualization type
+    visualization_type = st.selectbox("Select Visualization Type", ["Table", "Graph"])
+
+    # Display data based on selected visualization type
+    if visualization_type == "Table":
+        response = api_endpoint()
+        df = pd.DataFrame(response, columns=["Date", "Video", "Rating", "Disability Guess"])  # Correct column labels
+        df = df[["Date", "Video", "Rating", "Disability Guess"]]  # Reorder the columns
+        st.write(df)
+    elif visualization_type == "Graph":
+        response = api_endpoint()
+        df = pd.DataFrame(response)
+        rating_counts = df["Rating"].value_counts().sort_index()
+        plt.bar(rating_counts.index, rating_counts.values)
+        plt.xlabel("Rating")
+        plt.ylabel("Count")
+        plt.title("Rating Distribution")
+        st.pyplot(plt)
 
 
 
-
-    
-
-# Define API endpoint
-@st.cache
-def api_endpoint():
-    saved_data = get_saved_data("responses.csv")
-    return saved_data
-
-# Display a selectbox to choose the data visualization type
-visualization_type = st.selectbox("Select Visualization Type", ["Table", "Graph"])
-
-# Display data based on selected visualization type
-if visualization_type == "Table":
-    response = api_endpoint()
-    df = pd.DataFrame(response, columns=["Date", "Video", "Rating", "Disability Guess"])  # Correct column labels
-    df = df[["Date", "Video", "Rating", "Disability Guess"]]  # Reorder the columns
-    st.write(df)
-elif visualization_type == "Graph":
-    response = api_endpoint()
-    df = pd.DataFrame(response)
-    rating_counts = df["Rating"].value_counts().sort_index()
-    plt.bar(rating_counts.index, rating_counts.values)
-    plt.xlabel("Rating")
-    plt.ylabel("Count")
-    plt.title("Rating Distribution")
-    st.pyplot(plt)
