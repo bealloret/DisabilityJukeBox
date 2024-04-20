@@ -35,6 +35,23 @@ video_urls = [
     "https://www.youtube.com/watch?v=Idsb6gk6j_U"
 ]
 
+# List of artists with disabilities and Wikipedia links
+artist_info = [
+    "Brian Wilson was a renowned musician who despite suffering from severe mental health issues, created groundbreaking music.",
+    "Ludwig van Beethoven was a visionary composer who lived with hearing loss and inspired millions.",
+    "Tony Iommi was a virtuoso guitarist who continued performing despite a physical disability.",
+    "Django Reinhardt was a talented guitarist who faced amputation of his fingers but found solace in music.",
+    "Joaquín Rodrigo was a prolific composer who triumphed over blindness to create unforgettable melodies."
+]
+
+artist_links = [
+    "https://en.wikipedia.org/wiki/Brian_Wilson",
+    "https://en.wikipedia.org/wiki/Ludwig_van_Beethoven",
+    "https://en.wikipedia.org/wiki/Tony_Iommi",
+    "https://en.wikipedia.org/wiki/Django_Reinhardt",
+    "https://en.wikipedia.org/wiki/Joaqu%C3%ADn_Rodrigo"
+]
+
 # Main Streamlit app
 st.title("Disability Juke Box")
 for i, video_url in enumerate(video_urls):
@@ -43,6 +60,10 @@ for i, video_url in enumerate(video_urls):
     rating = st.slider(f"How much do you like this song (Video {i + 1})?", 1, 5, key=f"rating_{i}")
     disability_guess = st.radio(f"One of the creators/performers of this song had a disability. Which disability do you think it was? (Song {i + 1})",
                                  ('mental illness', 'sensory disability: deafness', 'sensory disability: blindness', 'physical disability: amputation'), key=f"disability_{i}")
+    st.write(f"### Artist Info for Song {i + 1}")
+    if st.button(f"Show Artist Info for Song {i + 1}"):
+        st.markdown(artist_info[i])
+        st.markdown(f"[More info on Wikipedia]({artist_links[i]})")
     
     # Save responses to CSV file
     data = {
@@ -63,4 +84,3 @@ if st.button("Get Data via API"):
     response = api_endpoint()
     df = pd.DataFrame(response, columns=["Date", "Video", "Rating", "Disability Guess"])  # Correct column labels
     st.write(df)
-
