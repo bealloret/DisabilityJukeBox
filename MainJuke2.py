@@ -66,13 +66,13 @@ for i, video_url in enumerate(video_urls):
         st.markdown(artist_info[i])
         st.markdown(f"[More info on Wikipedia]({artist_links[i]})")
     
-    # Save responses to CSV file
- data = {
-    "Date": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-    "Video": f"Video {i + 1}",
-    "Rating": rating,
-    "Disability Guess": disability_guess
-}
+     # Save responses to CSV file
+    data = {
+        "Date": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "Video": f"Video {i + 1}",
+        "Rating": rating,
+        "Disability Guess": disability_guess
+    }
     save_to_csv("responses.csv", data)
 
 # Define API endpoint
