@@ -68,11 +68,11 @@ for i, video_url in enumerate(video_urls):
     
     # Save responses to CSV file
     data = {
-        "Date": None,
-        "Video": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "Rating": f"Video {i + 1}",
-        "Disability Guess": rating
-    }
+    "Date": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+    "Video": f"Video {i + 1}",
+    "Rating": rating,
+    "Disability Guess": disability_guess
+}
     save_to_csv("responses.csv", data)
 
 # Define API endpoint
