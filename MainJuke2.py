@@ -61,5 +61,6 @@ def api_endpoint():
 # Display a button to trigger data retrieval via API
 if st.button("Get Data via API"):
     response = api_endpoint()
-    st.write(pd.DataFrame(response))  # Convert to DataFrame for better display
+    df = pd.DataFrame(response, columns=["Date", "Video", "Rating", "Disability Guess"])  # Correct column labels
+    st.write(df)
 
