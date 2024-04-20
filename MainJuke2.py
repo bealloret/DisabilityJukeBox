@@ -78,15 +78,23 @@ for i, video_url in enumerate(video_urls):
     if st.button(f"Show Artist Info for Song {i + 1}"):
         st.markdown(artist_info[i])
         st.markdown(f"[More info on Wikipedia]({artist_links[i]})")
+        # Generate an entry number using the current timestamp
+ 
+# Generate an entry number using the current timestamp
+entry_number = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+
+# Save responses to CSV file
+data = {
+    "Video": f"Video {i + 1}",
+    "Rating": rating,
+    "Disability Guess": disability_guess
+}
+save_to_csv("responses.csv", data, entry_number)
+
+
+
+
     
-     # Save responses to CSV file
-    data = {
-        "Date": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "Video": f"Video {i + 1}",
-        "Rating": rating,
-        "Disability Guess": disability_guess
-    }
-    save_to_csv("responses.csv", data)
 
 # Define API endpoint
 @st.cache
