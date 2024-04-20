@@ -94,6 +94,7 @@ visualization_type = st.selectbox("Select Visualization Type", ["Table", "Graph"
 if visualization_type == "Table":
     response = api_endpoint()
     df = pd.DataFrame(response, columns=["Date", "Video", "Rating", "Disability Guess"])  # Correct column labels
+    df = df[["Video", "Date", "Rating", "Disability Guess"]]  # Reorder the columns
     st.write(df)
 elif visualization_type == "Graph":
     response = api_endpoint()
