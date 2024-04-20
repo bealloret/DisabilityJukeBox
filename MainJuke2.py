@@ -15,8 +15,9 @@ def save_to_csv(filename, data):
             if file.tell() == 0:
                 writer.writeheader()
             data["Date"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Add current date and time
-            data["Case"] = len(existing_data) + 1  # Assign a unique case number
+            data["Case"] = data["Date"]  # Use date and time as unique identifier
             writer.writerow(data)
+
 
 
 # Function to retrieve saved data from CSV file
