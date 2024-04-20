@@ -25,7 +25,7 @@ def get_saved_data(filename):
         reader = csv.DictReader(file)
         for row in reader:
             row_data = {
-                "Date": row["Date"],
+                "Date": row.get("Date", ""),  # Use row.get to handle missing "Date" column
                 "Video": row["Video"],
                 "Rating": row["Rating"],
                 "Disability Guess": row["Disability Guess"]
