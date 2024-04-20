@@ -4,6 +4,7 @@ import csv
 import base64
 import requests
 import datetime
+import matplotlib.pyplot as plt 
 
 # Function to save responses to CSV file
 def save_to_csv(filename, data):
