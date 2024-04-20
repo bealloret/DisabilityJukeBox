@@ -7,18 +7,15 @@ import datetime
 import matplotlib.pyplot as plt 
 
 # Function to save responses to CSV file
-def save_to_csv(filename, data, entry_number):
+def save_to_csv(filename, data):
     existing_data = get_saved_data(filename)
     with open(filename, "a", newline="") as file:
-        writer = csv.DictWriter(file, fieldnames=["Case", "Date", "Video", "Rating", "Disability Guess"])
+        writer = csv.DictWriter(file, fieldnames=["Video", "Rating", "Disability Guess"])
         if not existing_data or data not in existing_data:
             if file.tell() == 0:
                 writer.writeheader()
             data["Date"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Add current date and time
-            data["Case"] = entry_number  # Use entry number as unique identifier
             writer.writerow({
-                "Case": entry_number,
-                "Date": data["Date"],
                 "Video": data["Video"],
                 "Rating": data["Rating"],
                 "Disability Guess": data["Disability Guess"]
@@ -88,7 +85,7 @@ for i, video_url in enumerate(video_urls):
         "Rating": rating,
         "Disability Guess": disability_guess
     }
-    save_to_csv("responses.csv", data, entry_number)
+    save_to_csv("responses.csv", data)
 
 # Define API endpoint
 @st.cache
@@ -114,6 +111,5 @@ elif visualization_type == "Graph":
     plt.ylabel("Count")
     plt.title("Rating Distribution")
     st.pyplot(plt)
-
 
 
