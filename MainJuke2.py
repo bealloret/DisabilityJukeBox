@@ -3,14 +3,17 @@ import pandas as pd
 import csv
 import base64
 import requests
+import datetime
 
 # Function to save responses to CSV file
 def save_to_csv(filename, data):
+    data["Date"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Add current date and time
     with open(filename, "a", newline="") as file:
-        writer = csv.DictWriter(file, fieldnames=["Video", "Rating", "Disability Guess"])
+        writer = csv.DictWriter(file, fieldnames=["Date", "Video", "Rating", "Disability Guess"])
         if file.tell() == 0:
             writer.writeheader()
         writer.writerow(data)
+
 
 # Function to retrieve saved data from CSV file
 def get_saved_data(filename):
