@@ -24,8 +24,6 @@ def save_to_csv(filename, data, entry_number):
                 "Disability Guess": data["Disability Guess"]
             })
 
-
-
 # Function to retrieve saved data from CSV file
 def get_saved_data(filename):
     saved_data = []
@@ -40,6 +38,7 @@ def get_saved_data(filename):
             }
             saved_data.append(row_data)
     return saved_data
+
 # List of YouTube video URLs
 video_urls = [
     "https://www.youtube.com/watch?v=apBWI6xrbLY",
@@ -78,7 +77,8 @@ for i, video_url in enumerate(video_urls):
     if st.button(f"Show Artist Info for Song {i + 1}"):
         st.markdown(artist_info[i])
         st.markdown(f"[More info on Wikipedia]({artist_links[i]})")
-        
+        # Generate an entry number using the current timestamp
+ 
     # Generate an entry number using the current timestamp
     entry_number = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
 
@@ -90,7 +90,11 @@ for i, video_url in enumerate(video_urls):
     }
     save_to_csv("responses.csv", data, entry_number)
 
-    # Define API endpoint
+# Define API endpoint
+@st.cache
+def api_endpoint():
+    saved_data =
+
     @st.cache
     def api_endpoint():
         saved_data = get_saved_data("responses.csv")
