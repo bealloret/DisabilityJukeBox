@@ -7,7 +7,7 @@ import datetime
 import matplotlib.pyplot as plt 
 
 # Function to save responses to CSV file
-def save_to_csv(filename, data):
+def save_to_csv(filename, data, entry_number):
     existing_data = get_saved_data(filename)
     with open(filename, "a", newline="") as file:
         writer = csv.DictWriter(file, fieldnames=["Case", "Date", "Video", "Rating", "Disability Guess"])
@@ -15,8 +15,14 @@ def save_to_csv(filename, data):
             if file.tell() == 0:
                 writer.writeheader()
             data["Date"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Add current date and time
-            data["Case"] = data["Date"]  # Use date and time as unique identifier
-            writer.writerow(data)
+            data["Case"] = entry_number  # Use entry number as unique identifier
+            writer.writerow({
+                "Case": entry_number,
+                "Date": data["Date"],
+                "Video": data["Video"],
+                "Rating": data["Rating"],
+                "Disability Guess": data["Disability Guess"]
+            })
 
 
 
@@ -75,7 +81,7 @@ for i, video_url in enumerate(video_urls):
     
      # Save responses to CSV file
     data = {
-        #"Date": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "Date": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "Video": f"Video {i + 1}",
         "Rating": rating,
         "Disability Guess": disability_guess
