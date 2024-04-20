@@ -107,14 +107,14 @@ elif visualization_type == "Graph":
     response = api_endpoint()
     df = pd.DataFrame(response)
     fig, ax = plt.subplots()
-    for video, data in df.groupby("Video"):
-        rating_counts = data["Rating"].value_counts().sort_index()
-        ax.plot(rating_counts.index, rating_counts.values, label=video)
-    ax.set_xlabel("Rating")
-    ax.set_ylabel("Count")
-    ax.set_title("Rating Distribution by Video")
+    for video, rating in zip(df["Video"], df["Rating"]):
+        ax.plot(video, rating, marker='o', label=f"{video} - Rating: {rating}")
+    ax.set_xlabel("Video")
+    ax.set_ylabel("Rating")
+    ax.set_title("Rating for Each Video")
     ax.legend()
     st.pyplot(fig)
+
 
 
 
