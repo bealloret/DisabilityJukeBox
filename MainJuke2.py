@@ -23,16 +23,15 @@ def get_saved_data(filename):
     saved_data = []
     with open(filename, "r", newline="") as file:
         reader = csv.DictReader(file)
-        for row in reader:
+        for idx, row in enumerate(reader, start=1):
             row_data = {
                 "Date": row.get("Date", ""),  # Use row.get to handle missing "Date" column
-                "Video": f"Video {idx}",
+                "Video": row["Video"],  # Use the existing "Video" column from the CSV
                 "Rating": row["Rating"],
                 "Disability Guess": row["Disability Guess"]
             }
             saved_data.append(row_data)
     return saved_data
-
 # List of YouTube video URLs
 video_urls = [
     "https://www.youtube.com/watch?v=apBWI6xrbLY",
