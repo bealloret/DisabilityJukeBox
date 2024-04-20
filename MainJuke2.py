@@ -24,7 +24,13 @@ def get_saved_data(filename):
     with open(filename, "r", newline="") as file:
         reader = csv.DictReader(file)
         for row in reader:
-            saved_data.append(row)
+            row_data = {
+                "Date": row["Date"],
+                "Video": row["Video"],
+                "Rating": row["Rating"],
+                "Disability Guess": row["Disability Guess"]
+            }
+            saved_data.append(row_data)
     return saved_data
 
 # List of YouTube video URLs
