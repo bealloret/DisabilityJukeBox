@@ -67,9 +67,10 @@ for i, video_url in enumerate(video_urls):
     
     # Save responses to CSV file
     data = {
-        "Video": f"Video {i + 1}",
-        "Rating": rating,
-        "Disability Guess": disability_guess
+        "Date": None,
+        "Video": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "Rating": f"Video {i + 1}",
+        "Disability Guess": rating
     }
     save_to_csv("responses.csv", data)
 
@@ -79,8 +80,20 @@ def api_endpoint():
     saved_data = get_saved_data("responses.csv")
     return saved_data
 
-# Display a button to trigger data retrieval via API
-if st.button("Get Data via API"):
+# Display a selectbox to choose the data visualization type
+visualization_type = st.selectbox("Select Visualization Type", ["Table", "Graph"])
+
+# Display data based on selected visualization type
+if visualization_type == "Table":
     response = api_endpoint()
     df = pd.DataFrame(response, columns=["Date", "Video", "Rating", "Disability Guess"])  # Correct column labels
     st.write(df)
+elif visualization_type == "Graph":
+    response = api_endpoint()
+    df = pd.DataFrame(response)
+    rating_counts = df["Rating"].value_counts().sort_index()
+    plt.bar(rating_counts.index, rating_counts.values)
+    plt.xlabel("Rating")
+    plt.ylabel("Count")
+    plt.title("Rating Distribution")
+    st.pyplot(plt)
